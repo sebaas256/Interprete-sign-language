@@ -5,13 +5,13 @@ from mediapipe.python.solutions.holistic import Holistic
 from helpers import mediapipe_detection, draw_keypoints
 
 # Ruta al modelo entrenado
-MODEL_PATH = r'C:\Users\lilia\OneDrive\Escritorio\modelo_lstm_lsp-main\modelo_lstm_lsp-main\modelo_gestos.h5'
+MODEL_PATH = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\modelo_gestos.keras'
 
 # Carga el modelo entrenado
 model = tf.keras.models.load_model(MODEL_PATH)
 
 # Lista de nombres de gestos en el mismo orden en que se entrenó el modelo
-gestures = ['ok', 'gracias', 'hola']
+gestures = ['gracias','hola','ok']
 
 def keypoints_to_image(keypoints, width=224, height=224):
     image = np.zeros((height, width, 3), dtype=np.uint8)
@@ -47,20 +47,26 @@ def detectar_gestos_en_tiempo_real():
             if not ret:
                 break
             
+            frame = cv2.flip(frame, 1)  # Voltear horizontalmente para mejor experiencia de usuario
+            image = frame.copy()
+            results = mediapipe_detection(frame, holistic_model)
             results = mediapipe_detection(frame, holistic_model)
             
             # Preprocesar los resultados para el modelo
             image = preprocess_results(results)
-            
+              
             if image is None:
                 gesture = 'No se detectaron manos'
             else:
                 prediction = model.predict(image)
+                print("Predicción:", prediction)
+                print("Índice de la clase:", np.argmax(prediction, axis=1)[0])
+                print("Confianza:", np.max(prediction, axis=1)[0])
                 gesture_index = np.argmax(prediction, axis=1)[0]
                 confidence = np.max(prediction, axis=1)[0]
 
                 # Mostrar el nombre del gesto y la confianza
-                if confidence < 0.5:  # Ajusta el umbral según sea necesario
+                if confidence < 0.6:  # Ajusta el umbral según sea necesario
                     gesture = 'Gesto no identificado'
                 else:
                     gesture = gestures[gesture_index]
@@ -78,4 +84,4 @@ def detectar_gestos_en_tiempo_real():
         cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    detectar_gestos_en_tiempo_real()
+    detectar_gestos_en_tiempo_real()   

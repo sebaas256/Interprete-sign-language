@@ -6,10 +6,10 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
 
 # Directorios de datos
-train_dir = r'C:\Users\lilia\OneDrive\Escritorio\modelo_lstm_lsp-main\gestos\train\ok'
-val_dir = r'C:\Users\lilia\OneDrive\Escritorio\modelo_lstm_lsp-main\gestos\val\ok'
+train_dir = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\train'
+val_dir = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\val'
 
-# Parámetros de entrenamiento
+# Parámetros de entrenamiento_gene
 img_size = (224, 224)
 batch_size = 32
 num_epochs = 10
@@ -23,6 +23,8 @@ val_datagen = ImageDataGenerator(rescale=1./255)
 
 train_generator = train_datagen.flow_from_directory(train_dir, target_size=img_size, batch_size=batch_size, class_mode='categorical')
 val_generator = val_datagen.flow_from_directory(val_dir, target_size=img_size, batch_size=batch_size, class_mode='categorical')
+
+print(train_generator.class_indices)
 
 # Cargar el modelo pre-entrenado
 base_model = MobileNetV2(weights='imagenet', include_top=False, input_shape=img_size + (3,))
@@ -43,4 +45,4 @@ model.compile(optimizer=Adam(learning_rate=0.0001), loss='categorical_crossentro
 model.fit(train_generator, epochs=num_epochs, validation_data=val_generator)
 
 # Guardar el modelo
-model.save('modelo_gestos.h5')
+model.save('modelo_gestos.keras')
