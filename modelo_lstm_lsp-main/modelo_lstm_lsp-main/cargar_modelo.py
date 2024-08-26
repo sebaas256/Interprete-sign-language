@@ -59,14 +59,11 @@ def detectar_gestos_en_tiempo_real():
                 gesture = 'No se detectaron manos'
             else:
                 prediction = model.predict(image)
-                print("Predicción:", prediction)
-                print("Índice de la clase:", np.argmax(prediction, axis=1)[0])
-                print("Confianza:", np.max(prediction, axis=1)[0])
                 gesture_index = np.argmax(prediction, axis=1)[0]
                 confidence = np.max(prediction, axis=1)[0]
 
                 # Mostrar el nombre del gesto y la confianza
-                if confidence < 0.7:  # Ajusta el umbral según sea necesario
+                if confidence < 0.99:  # Ajusta el umbral según sea necesario
                     gesture = 'Gesto no identificado'
                 else:
                     gesture = gestures[gesture_index]
