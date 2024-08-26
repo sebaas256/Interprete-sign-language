@@ -5,7 +5,7 @@ from mediapipe.python.solutions.holistic import Holistic
 from helpers import mediapipe_detection, draw_keypoints
 
 # Ruta al modelo entrenado
-MODEL_PATH = r'C:\Users\lilia\OneDrive\Escritorio\modelo_lstm_lsp-main\modelo_lstm_lsp-main\modelo_gestos.h5'
+MODEL_PATH = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\modelo_lstm_lsp-main\modelo_gestos.h5'
 
 # Carga el modelo entrenado
 model = tf.keras.models.load_model(MODEL_PATH)
