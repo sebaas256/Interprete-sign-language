@@ -66,7 +66,7 @@ def detectar_gestos_en_tiempo_real():
                 confidence = np.max(prediction, axis=1)[0]
 
                 # Mostrar el nombre del gesto y la confianza
-                if confidence < 0.6:  # Ajusta el umbral según sea necesario
+                if confidence < 0.7:  # Ajusta el umbral según sea necesario
                     gesture = 'Gesto no identificado'
                 else:
                     gesture = gestures[gesture_index]

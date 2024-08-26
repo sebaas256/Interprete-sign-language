@@ -24,8 +24,6 @@ val_datagen = ImageDataGenerator(rescale=1./255)
 train_generator = train_datagen.flow_from_directory(train_dir, target_size=img_size, batch_size=batch_size, class_mode='categorical')
 val_generator = val_datagen.flow_from_directory(val_dir, target_size=img_size, batch_size=batch_size, class_mode='categorical')
 
-print(train_generator.class_indices)
-
 # Cargar el modelo pre-entrenado
 base_model = MobileNetV2(weights='imagenet', include_top=False, input_shape=img_size + (3,))
 base_model.trainable = False
