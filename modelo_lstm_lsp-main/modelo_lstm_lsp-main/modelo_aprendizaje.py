@@ -5,10 +5,11 @@ from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, Dropout
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
+import matplotlib.pyplot as plt  # Importar matplotlib para gráficos
 
 # Directorios de datos
-train_dir = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\train'
-val_dir = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\val'
+train_dir = r'C:\Users\USER\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\train'
+val_dir = r'C:\Users\USER\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\val'
 
 # Parámetros de entrenamiento
 img_size = (224, 224)
@@ -73,7 +74,7 @@ reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=5, min_lr
 model_checkpoint = ModelCheckpoint('best_model.keras', save_best_only=True, monitor='val_accuracy', mode='max')
 
 # Entrenamiento del modelo
-model.fit(
+history = model.fit(
     train_generator, 
     epochs=num_epochs, 
     validation_data=val_generator, 
@@ -82,3 +83,11 @@ model.fit(
 
 # Guardar el mejor modelo
 model.save('modelo_gestos_mejorado_final.keras')
+
+# Gráfico del historial de entrenamiento
+plt.xlabel("# Epoca")
+plt.ylabel("Magnitud de pérdida")
+plt.plot(history.history["loss"], label='Pérdida de entrenamiento')
+plt.plot(history.history["val_loss"], label='Pérdida de validación')
+plt.legend()
+plt.show()
