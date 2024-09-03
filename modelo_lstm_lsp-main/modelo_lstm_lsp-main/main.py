@@ -5,18 +5,20 @@ from mediapipe.python.solutions.holistic import Holistic
 from helpers import mediapipe_detection, draw_keypoints
 
 # Ruta al modelo entrenado
-MODEL_PATH = r'C:\Users\USER\OneDrive\Escritorio\Proyecto_final\modelo_gestos_mejorado_final.keras'
+MODEL_PATH = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final-test\nuevo_modelo_gestos_mejorado_final.keras'
 
-# Carga el modelo entrenado
+# Cargar el modelo entrenado
 model = tf.keras.models.load_model(MODEL_PATH)
 
 # Lista de nombres de gestos en el mismo orden en que se entrenó el modelo
-gestures = ['gracias','hola','ok']
+gestures = ['gracias', 'hola', 'ok', 'por favor', 'yo']
 
 # Umbral de confianza
 CONFIDENCE_THRESHOLD = 0.8
 # Tamaño de la cola para suavizar las predicciones
 PREDICTION_QUEUE_SIZE = 5
+# Configuración para mantener el gesto detectado
+GESTURE_DISPLAY_TIME = 30  # Número de frames para mantener el gesto en pantalla
 
 def keypoints_to_image(keypoints, width=224, height=224):
     image = np.zeros((height, width, 3), dtype=np.uint8)
@@ -57,6 +59,7 @@ def detectar_gestos_en_tiempo_real():
         
         last_gesture = None
         prediction_queue = []
+        gesture_counter = 0
         
         while video.isOpened():
             ret, frame = video.read()
@@ -87,11 +90,19 @@ def detectar_gestos_en_tiempo_real():
                     if len(prediction_queue) > PREDICTION_QUEUE_SIZE:
                         prediction_queue.pop(0)
                     
-                    gesture = smooth_predictions(prediction_queue, PREDICTION_QUEUE_SIZE)
-            
-            # Evitar predicciones repetitivas
-            if gesture != last_gesture:
-                last_gesture = gesture
+                    smoothed_gesture = smooth_predictions(prediction_queue, PREDICTION_QUEUE_SIZE)
+
+                    if smoothed_gesture != last_gesture:
+                        gesture_counter = GESTURE_DISPLAY_TIME
+                        last_gesture = smoothed_gesture
+                    else:
+                        gesture_counter -= 1
+
+                    # Mantener el gesto en pantalla si el contador no ha expirado
+                    if gesture_counter > 0:
+                        gesture = last_gesture
+                    else:
+                        gesture = 'No se detectaron manos'
             
             cv2.putText(frame, f'Gesto: {gesture}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
             

@@ -6,7 +6,7 @@ from datetime import datetime
 
 # Configuración de carpeta para guardar imágenes
 GESTOS_DIR = 'gestos'
-gestos = ['ok', 'gracias', 'hola']  # Lista de gestos que quieres capturar
+gestos = ['por favor', 'yo']  # Lista de gestos que quieres capturar
 
 # Crear carpetas para cada gesto
 for gesto in gestos:
