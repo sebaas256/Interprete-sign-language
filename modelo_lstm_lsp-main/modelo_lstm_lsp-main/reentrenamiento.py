@@ -7,8 +7,8 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
 # Directorios de datos
-new_train_dir = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\train'  # Ruta a los nuevos datos de entrenamiento
-new_val_dir = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\train'      # Ruta a los nuevos datos de validación
+new_train_dir = r'C:\Users\USER\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\train'  # Ruta a los nuevos datos de entrenamiento
+new_val_dir = r'C:\Users\USER\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\val'      # Ruta a los nuevos datos de validación
 
 # Parámetros de entrenamiento
 img_size = (224, 224)
@@ -17,7 +17,7 @@ num_epochs = 20  # Aumentado para permitir un entrenamiento más exhaustivo
 initial_learning_rate = 0.0001
 
 # Cargar el modelo preentrenado
-existing_model_path = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\nuevo_modelo_gestos_mejorado_final.keras'
+existing_model_path = r'C:\Users\USER\OneDrive\Escritorio\Proyecto_final\nuevo_modelo_gestos_mejorado_final.keras'
 base_model = tf.keras.models.load_model(existing_model_path)
 
 # Preparación de los nuevos datos
@@ -72,7 +72,7 @@ model.compile(optimizer=Adam(learning_rate=initial_learning_rate), loss='categor
 # Callbacks
 early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
 reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=5, min_lr=1e-6)
-model_checkpoint = ModelCheckpoint('best_model.keras', save_best_only=True, monitor='val_accuracy', mode='max')
+model_checkpoint = ModelCheckpoint('best_model2.keras', save_best_only=True, monitor='val_accuracy', mode='max')
 
 # Entrenamiento del modelo
 model.fit(
