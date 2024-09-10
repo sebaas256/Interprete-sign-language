@@ -8,13 +8,13 @@ import pygame
 import io
 
 # Ruta al modelo entrenado
-MODEL_PATH = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\nuevo_modelo_gestos_mejorado_final.keras'
+MODEL_PATH = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\best_model.keras'
 
 # Cargar el modelo entrenado
 model = tf.keras.models.load_model(MODEL_PATH)
 
 # Lista de nombres de gestos en el mismo orden en que se entrenó el modelo
-gestures = ['gracias', 'hola', 'ok', 'por favor', 'yo']
+gestures = ['gracias', 'hola', 'ok','te amo']
 
 # Umbral de confianza
 CONFIDENCE_THRESHOLD = 0.8
@@ -88,7 +88,7 @@ def detectar_gestos_en_tiempo_real():
                 else:
                     gesture = gestures[gesture_index]
                     prediction_queue.append(gesture)
-                    reproducir_palabra(gesture)
+                    # reproducir_palabra(gesture)
 
                     # Suavizar la predicción final
                     if len(prediction_queue) > PREDICTION_QUEUE_SIZE:
@@ -119,19 +119,19 @@ def detectar_gestos_en_tiempo_real():
         video.release()
         cv2.destroyAllWindows()
         
-def reproducir_palabra(texto):
-    tts = gTTS(text=texto, lang='es')
+# def reproducir_palabra(texto):
+#     tts = gTTS(text=texto, lang='es')
     
-    mp3_fp = io.BytesIO()
-    tts.write_to_fp(mp3_fp)
-    mp3_fp.seek(0)
+#     mp3_fp = io.BytesIO()
+#     tts.write_to_fp(mp3_fp)
+#     mp3_fp.seek(0)
     
-    pygame.mixer.init()
-    pygame.mixer.music.load(mp3_fp, 'mp3')
-    pygame.mixer.music.play()
+#     pygame.mixer.init()
+#     pygame.mixer.music.load(mp3_fp, 'mp3')
+#     pygame.mixer.music.play()
     
-    while pygame.mixer.music.get_busy():
-        continue 
+#     while pygame.mixer.music.get_busy():
+#         continue 
 
 if __name__ == "__main__":
     detectar_gestos_en_tiempo_real()

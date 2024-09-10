@@ -7,8 +7,8 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
 # Directorios de datos
-new_train_dir = r'C:\Users\USER\OneDrive\Escritorio\Proyecto_final-test\modelo_lstm_lsp-main\gestos\train'  # Ruta a los nuevos datos de entrenamiento
-new_val_dir = r'C:\Users\USER\OneDrive\Escritorio\Proyecto_final-test\modelo_lstm_lsp-main\gestos\val'      # Ruta a los nuevos datos de validación
+new_train_dir = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\train'  # Ruta a los nuevos datos de entrenamiento
+new_val_dir = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\train'      # Ruta a los nuevos datos de validación
 
 # Parámetros de entrenamiento
 img_size = (224, 224)
@@ -17,7 +17,7 @@ num_epochs = 20  # Aumentado para permitir un entrenamiento más exhaustivo
 initial_learning_rate = 0.0001
 
 # Cargar el modelo preentrenado
-existing_model_path = r'C:\Users\USER\OneDrive\Escritorio\Proyecto_final-test\best_model.keras'
+existing_model_path = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\nuevo_modelo_gestos_mejorado_final.keras'
 base_model = tf.keras.models.load_model(existing_model_path)
 
 # Preparación de los nuevos datos
@@ -57,10 +57,10 @@ for layer in base_model.layers[fine_tune_at:]:
 
 # Añadir nuevas capas al modelo si es necesario (opcional)
 x = base_model.layers[-2].output  # Asumiendo que el penúltimo layer es GlobalAveragePooling2D
-x = Dense(1024, activation='relu', name='dense_1024_1')(x)
-x = Dropout(0.5, name='dropout_0')(x)  # Aumentar Dropout para mayor regularización
-x = Dense(512, activation='relu', name='dense_512_1')(x)
-x = Dropout(0.5, name='dropout_2')(x)
+x = Dense(1024, activation='relu', name='dense_1024_2')(x)
+x = Dropout(0.5, name='dropout_45')(x)  # Aumentar Dropout para mayor regularización
+x = Dense(512, activation='relu', name='dense_512_12')(x)
+x = Dropout(0.5, name='dropout_255')(x)
 predictions = Dense(new_train_generator.num_classes, activation='softmax', name='predictions')(x)
 
 # Crear el nuevo modelo
@@ -83,4 +83,4 @@ model.fit(
 )
 
 # Guardar el nuevo modelo
-model.save('nuevo_modelo_gestos_mejorado_final.keras')
+model.save('Modelo_varias_personas.keras')
