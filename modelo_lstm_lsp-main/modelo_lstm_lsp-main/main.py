@@ -14,7 +14,7 @@ MODEL_PATH = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\best_model.kera
 model = tf.keras.models.load_model(MODEL_PATH)
 
 # Lista de nombres de gestos en el mismo orden en que se entrenó el modelo
-gestures = ['gracias', 'hola', 'ok','te amo']
+gestures = ['gracias','hola','ok','te amo']
 
 # Umbral de confianza
 CONFIDENCE_THRESHOLD = 0.8
