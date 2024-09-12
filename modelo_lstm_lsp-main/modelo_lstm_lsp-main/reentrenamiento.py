@@ -7,17 +7,17 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
 # Directorios de datos
-new_train_dir = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\train'  # Ruta a los nuevos datos de entrenamiento
-new_val_dir = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\val'      # Ruta a los nuevos datos de validación
+train_dir = r'C:\Users\USER\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\train' 
+val_dir = r'C:\Users\USER\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\val'
 
 # Parámetros de entrenamiento
 img_size = (224, 224)
 batch_size = 32
-num_epochs = 20  # Aumentado para permitir un entrenamiento más exhaustivo
-initial_learning_rate = 0.0001
+num_epochs = 25  
+initial_learning_rate = 1e-5  # Reducido para un mejor fine-tuning
 
 # Cargar el modelo preentrenado
-existing_model_path = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\best_model.keras'
+existing_model_path = r'C:\Users\USER\OneDrive\Escritorio\Proyecto_final\best_model.keras'
 base_model = tf.keras.models.load_model(existing_model_path)
 
 # Preparación de los nuevos datos
@@ -34,34 +34,35 @@ train_datagen = ImageDataGenerator(
 
 val_datagen = ImageDataGenerator(rescale=1./255)
 
-new_train_generator = train_datagen.flow_from_directory(
-    new_train_dir, 
+train_generator = train_datagen.flow_from_directory(
+    train_dir, 
     target_size=img_size, 
     batch_size=batch_size, 
     class_mode='categorical'
 )
 
-new_val_generator = val_datagen.flow_from_directory(
-    new_val_dir, 
+val_generator = val_datagen.flow_from_directory(
+    val_dir, 
     target_size=img_size, 
     batch_size=batch_size, 
     class_mode='categorical'
 )
 
-# Descongelar las últimas capas del modelo base para el fine-tuning
-fine_tune_at = 100  # Número de capas a descongelar
+# Descongelar las últimas 30-50 capas para fine-tuning
+fine_tune_at = len(base_model.layers) - 50  # Cambia '50' según sea necesario
 for layer in base_model.layers[:fine_tune_at]:
     layer.trainable = False
 for layer in base_model.layers[fine_tune_at:]:
     layer.trainable = True
 
-# Añadir nuevas capas al modelo si es necesario (opcional)
+
+# Añadir nuevas capas al modelo (opcional)
 x = base_model.layers[-2].output  # Asumiendo que el penúltimo layer es GlobalAveragePooling2D
 x = Dense(1024, activation='relu', name='dense_1024_20')(x)
 x = Dropout(0.5, name='dropout_4')(x)  # Aumentar Dropout para mayor regularización
 x = Dense(512, activation='relu', name='dense_512_121')(x)
 x = Dropout(0.5, name='dropout_255_1')(x)
-predictions = Dense(new_train_generator.num_classes, activation='softmax', name='predictions')(x)
+predictions = Dense(train_generator.num_classes, activation='softmax', name='predictions')(x)
 
 # Crear el nuevo modelo
 model = Model(inputs=base_model.input, outputs=predictions)
@@ -76,9 +77,9 @@ model_checkpoint = ModelCheckpoint('best_model2.keras', save_best_only=True, mon
 
 # Entrenamiento del modelo
 model.fit(
-    new_train_generator, 
+    train_generator, 
     epochs=num_epochs, 
-    validation_data=new_val_generator, 
+    validation_data=val_generator, 
     callbacks=[early_stopping, reduce_lr, model_checkpoint]
 )
 
