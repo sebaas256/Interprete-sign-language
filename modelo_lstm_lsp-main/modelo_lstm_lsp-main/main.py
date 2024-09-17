@@ -7,20 +7,15 @@ from gtts import gTTS
 import pygame
 import io
 
-# Ruta al modelo entrenado
-MODEL_PATH = r'C:\Users\USER\OneDrive\Escritorio\Proyecto_final\best_model.keras'
+MODEL_PATH = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\best_model.keras'
 
-# Cargar el modelo entrenado
 model = tf.keras.models.load_model(MODEL_PATH)
 
-# Lista de nombres de gestos en el mismo orden en que se entrenó el modelo
 gestures = ['gracias','hola','ok','te amo']
 
-# Umbral de confianza
 CONFIDENCE_THRESHOLD = 0.8
 # Tamaño de la cola para suavizar las predicciones
 PREDICTION_QUEUE_SIZE = 5
-# Configuración para mantener el gesto detectado
 GESTURE_DISPLAY_TIME = 30  # Número de frames para mantener el gesto en pantalla
 
 def keypoints_to_image(keypoints, width=224, height=224):
@@ -41,20 +36,20 @@ def preprocess_results(results):
             keypoints.extend([landmark.x, landmark.y, landmark.z])
     
     if len(keypoints) == 0:
-        return None  # No se detectaron puntos clave
+        return None  
     
     keypoints = np.array(keypoints)
     image = keypoints_to_image(keypoints)
     
-    # Asegurarse de que la imagen tiene las dimensiones correctas
-    image = cv2.resize(image, (224, 224))  # Asegurarse del tamaño correcto
-    image = np.expand_dims(image, axis=0)  # Añade una dimensión de batch
+    # Dimensiones de imagenes
+    image = cv2.resize(image, (224, 224))  
+    image = np.expand_dims(image, axis=0)  # Añadiendo una dimensión de batch
     return image
 
 def smooth_predictions(predictions, queue_size):
     if len(predictions) < queue_size:
-        return predictions[-1]  # Retorna la última predicción si hay pocas en la cola
-    return max(set(predictions), key=predictions.count)  # Predicción más común en la cola
+        return predictions[-1]  # Retorna la ultima predicciun si hay pocas en la cola
+    return max(set(predictions), key=predictions.count)  # Predicciun mus comun en la cola
 
 def detectar_gestos_en_tiempo_real():
     with Holistic() as holistic_model:
@@ -69,7 +64,7 @@ def detectar_gestos_en_tiempo_real():
             if not ret:
                 break
             
-            frame = cv2.flip(frame, 1)  # Voltear la imagen para la vista espejo
+            frame = cv2.flip(frame, 1)  # Voltear la imagen para la vista espejo para mejorar la experiencia de usuario
             results = mediapipe_detection(frame, holistic_model)
 
             # Filtrar puntos clave solo de las manos
@@ -90,7 +85,7 @@ def detectar_gestos_en_tiempo_real():
                     prediction_queue.append(gesture)
                     reproducir_palabra(gesture)
 
-                    # Suavizar la predicción final
+                    # Suavizar la predicción final(esto ayuda a la prediccion del gesto)
                     if len(prediction_queue) > PREDICTION_QUEUE_SIZE:
                         prediction_queue.pop(0)
                     
@@ -118,7 +113,8 @@ def detectar_gestos_en_tiempo_real():
 
         video.release()
         cv2.destroyAllWindows()
-        
+
+#Utilizando pygame para reproducir la palabra o letra 
 def reproducir_palabra(texto):
     tts = gTTS(text=texto, lang='es')
     

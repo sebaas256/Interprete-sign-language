@@ -5,7 +5,7 @@ from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, Dropout
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
-import matplotlib.pyplot as plt  # Importar matplotlib para gráficos
+import matplotlib.pyplot as plt  
 
 # Directorios de datos
 train_dir = r'C:\Users\USER\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\train'
@@ -14,8 +14,8 @@ val_dir = r'C:\Users\USER\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-mai
 # Parámetros de entrenamiento
 img_size = (224, 224)
 batch_size = 32
-num_epochs = 50  # Aumentado para permitir un entrenamiento más exhaustivo
-fine_tune_at = 100  # Número de capas a descongelar para el fine-tuning
+num_epochs = 50  
+fine_tune_at = 100  
 initial_learning_rate = 0.0001
 
 # Preparación de los datos
