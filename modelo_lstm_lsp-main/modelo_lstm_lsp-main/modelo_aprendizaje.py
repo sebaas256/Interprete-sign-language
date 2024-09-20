@@ -8,13 +8,13 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLRO
 import matplotlib.pyplot as plt  
 
 # Directorios de datos
-train_dir = r'C:\Users\USER\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\train'
-val_dir = r'C:\Users\USER\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\val'
+train_dir = r'C:\Users\lilia\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\train'
+val_dir = r'C:\Users\lilia\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\val'
 
 # Parámetros de entrenamiento
 img_size = (224, 224)
 batch_size = 32
-num_epochs = 50  
+num_epochs = 25  
 fine_tune_at = 100  
 initial_learning_rate = 0.0001
 
@@ -82,7 +82,7 @@ history = model.fit(
 )
 
 # Guardar el mejor modelo
-model.save('modelo_gestos_mejorado_final.keras')
+model.save('try_abecedario.keras')
 
 # Gráfico del historial de entrenamiento
 plt.xlabel("# Epoca")

@@ -7,13 +7,13 @@ from gtts import gTTS
 import pygame
 import io
 
-MODEL_PATH = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\best_model.keras'
+MODEL_PATH = r'C:\Users\lilia\OneDrive\Escritorio\Proyecto_final\try_abecedario.keras'
 
 model = tf.keras.models.load_model(MODEL_PATH)
 
-gestures = ['gracias','hola','ok','te amo']
+gestures = ['A', 'C', 'B']
 
-CONFIDENCE_THRESHOLD = 0.8
+CONFIDENCE_THRESHOLD = 0.7
 # Tamaño de la cola para suavizar las predicciones
 PREDICTION_QUEUE_SIZE = 5
 GESTURE_DISPLAY_TIME = 30  # Número de frames para mantener el gesto en pantalla
@@ -83,7 +83,7 @@ def detectar_gestos_en_tiempo_real():
                 else:
                     gesture = gestures[gesture_index]
                     prediction_queue.append(gesture)
-                    reproducir_palabra(gesture)
+                    # reproducir_palabra(gesture)
 
                     # Suavizar la predicción final(esto ayuda a la prediccion del gesto)
                     if len(prediction_queue) > PREDICTION_QUEUE_SIZE:
@@ -115,19 +115,20 @@ def detectar_gestos_en_tiempo_real():
         cv2.destroyAllWindows()
 
 #Utilizando pygame para reproducir la palabra o letra 
-def reproducir_palabra(texto):
-    tts = gTTS(text=texto, lang='es')
     
-    mp3_fp = io.BytesIO()
-    tts.write_to_fp(mp3_fp)
-    mp3_fp.seek(0)
+# def reproducir_palabra(texto):
+#     tts = gTTS(text=texto, lang='es')
     
-    pygame.mixer.init()
-    pygame.mixer.music.load(mp3_fp, 'mp3')
-    pygame.mixer.music.play()
+#     mp3_fp = io.BytesIO()
+#     tts.write_to_fp(mp3_fp)
+#     mp3_fp.seek(0)
     
-    while pygame.mixer.music.get_busy():
-        continue 
+#     pygame.mixer.init()
+#     pygame.mixer.music.load(mp3_fp, 'mp3')
+#     pygame.mixer.music.play()
+    
+#     while pygame.mixer.music.get_busy():
+#         continue 
 
 if __name__ == "__main__":
     detectar_gestos_en_tiempo_real()
