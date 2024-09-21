@@ -7,8 +7,8 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
 # Directorios de datos
-train_dir = r'C:\Users\lilia\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\train' 
-val_dir = r'C:\Users\lilia\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\val'
+train_dir = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\train' 
+val_dir = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\modelo_lstm_lsp-main\gestos\val'
 
 # Parámetros de entrenamiento
 img_size = (224, 224)
@@ -17,7 +17,7 @@ num_epochs = 25
 initial_learning_rate = 1e-5  # Reducido para un mejor fine-tuning
 
 # Cargar el modelo preentrenado
-existing_model_path = r'C:\Users\lilia\OneDrive\Escritorio\Proyecto_final\try_abecedario.keras'
+existing_model_path = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\try_abecedario.keras'
 base_model = tf.keras.models.load_model(existing_model_path)
 
 # Preparación de los nuevos datos

@@ -6,14 +6,15 @@ from helpers import mediapipe_detection, draw_keypoints
 from gtts import gTTS
 import pygame
 import io
+import tkinter as tk
 
-MODEL_PATH = r'C:\Users\lilia\OneDrive\Escritorio\Proyecto_final\try_abecedario.keras'
+MODEL_PATH = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\best_model.keras'
 
 model = tf.keras.models.load_model(MODEL_PATH)
 
-gestures = ['A', 'C', 'B']
+gestures = ['B', 'A', 'C']
 
-CONFIDENCE_THRESHOLD = 0.7
+CONFIDENCE_THRESHOLD = 0.8
 # Tamaño de la cola para suavizar las predicciones
 PREDICTION_QUEUE_SIZE = 5
 GESTURE_DISPLAY_TIME = 30  # Número de frames para mantener el gesto en pantalla
@@ -54,7 +55,11 @@ def smooth_predictions(predictions, queue_size):
 def detectar_gestos_en_tiempo_real():
     with Holistic() as holistic_model:
         video = cv2.VideoCapture(0)
-        
+
+        # Aumentar el tamaño de la ventana
+        video.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # Ancho de la ventana
+        video.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)  # Altura de la ventana
+                
         last_gesture = None
         prediction_queue = []
         gesture_counter = 0
@@ -64,7 +69,7 @@ def detectar_gestos_en_tiempo_real():
             if not ret:
                 break
             
-            frame = cv2.flip(frame, 1)  # Voltear la imagen para la vista espejo para mejorar la experiencia de usuario
+            frame = cv2.flip(frame, 1)  # Voltear la imagen para la vista espejo
             results = mediapipe_detection(frame, holistic_model)
 
             # Filtrar puntos clave solo de las manos
@@ -77,15 +82,13 @@ def detectar_gestos_en_tiempo_real():
                 gesture_index = np.argmax(prediction, axis=1)[0]
                 confidence = np.max(prediction, axis=1)[0]
 
-                # Umbral de confianza para la predicción
                 if confidence < CONFIDENCE_THRESHOLD:
                     gesture = 'Gesto no identificado'
                 else:
                     gesture = gestures[gesture_index]
                     prediction_queue.append(gesture)
-                    # reproducir_palabra(gesture)
+                    reproducir_palabra(gesture)
 
-                    # Suavizar la predicción final(esto ayuda a la prediccion del gesto)
                     if len(prediction_queue) > PREDICTION_QUEUE_SIZE:
                         prediction_queue.pop(0)
                     
@@ -97,7 +100,6 @@ def detectar_gestos_en_tiempo_real():
                     else:
                         gesture_counter -= 1
 
-                    # Mantener el gesto en pantalla si el contador no ha expirado
                     if gesture_counter > 0:
                         gesture = last_gesture
                     else:
@@ -106,7 +108,7 @@ def detectar_gestos_en_tiempo_real():
             cv2.putText(frame, f'Gesto: {gesture}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
             
             draw_keypoints(frame, results)
-            cv2.imshow('Detección de Gestos', frame)
+            cv2.imshow('Handspeak', frame)
             
             if cv2.waitKey(10) & 0xFF == ord('q'):
                 break
@@ -116,19 +118,19 @@ def detectar_gestos_en_tiempo_real():
 
 #Utilizando pygame para reproducir la palabra o letra 
     
-# def reproducir_palabra(texto):
-#     tts = gTTS(text=texto, lang='es')
+def reproducir_palabra(texto):
+    tts = gTTS(text=texto, lang='es')
     
-#     mp3_fp = io.BytesIO()
-#     tts.write_to_fp(mp3_fp)
-#     mp3_fp.seek(0)
+    mp3_fp = io.BytesIO()
+    tts.write_to_fp(mp3_fp)
+    mp3_fp.seek(0)
     
-#     pygame.mixer.init()
-#     pygame.mixer.music.load(mp3_fp, 'mp3')
-#     pygame.mixer.music.play()
+    pygame.mixer.init()
+    pygame.mixer.music.load(mp3_fp, 'mp3')
+    pygame.mixer.music.play()
     
-#     while pygame.mixer.music.get_busy():
-#         continue 
+    while pygame.mixer.music.get_busy():
+        continue 
 
 if __name__ == "__main__":
     detectar_gestos_en_tiempo_real()
