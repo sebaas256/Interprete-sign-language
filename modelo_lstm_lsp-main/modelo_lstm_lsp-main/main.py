@@ -55,6 +55,10 @@ def detectar_gestos_en_tiempo_real():
     with Holistic() as holistic_model:
         video = cv2.VideoCapture(0)
         
+        # Aumentar el tamaño de la ventana
+        video.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # Ancho de la ventana
+        video.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)  # Altura de la ventana
+        
         last_gesture = None
         prediction_queue = []
         gesture_counter = 0
@@ -106,7 +110,7 @@ def detectar_gestos_en_tiempo_real():
             cv2.putText(frame, f'Gesto: {gesture}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
             
             draw_keypoints(frame, results)
-            cv2.imshow('Detección de Gestos', frame)
+            cv2.imshow('Handspeak', frame)
             
             if cv2.waitKey(10) & 0xFF == ord('q'):
                 break
