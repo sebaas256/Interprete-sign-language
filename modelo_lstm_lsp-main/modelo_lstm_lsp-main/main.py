@@ -8,12 +8,12 @@ import pygame
 import io
 
 # Ruta del modelo
-MODEL_PATH = r'C:\Users\lilia\OneDrive\Escritorio\Proyecto_final\try_abecedario.keras'
+MODEL_PATH = r'C:\Users\lilia\OneDrive\Escritorio\Proyecto_final\best_model_abecedario.keras'
 model = tf.keras.models.load_model(MODEL_PATH)
 
 # Gestos reconocidos por el modelo
 #gestures = ['gracias', 'hola', 'ok', 'te amo']
-gestures = ['A', 'B', 'C']
+gestures = ['B', 'A', 'C']
 
 
 # Umbral de confianza
