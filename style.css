@@ -18,16 +18,23 @@ body {
     font-family: var(--fuente-global);}
 
 .logo_flotante {
-    margin: 15px 50px; 
-    position: relative;
-    transition: transform 0.3s ease;    
+        position: absolute;
+        top: 15px;
+        left: 5%;
+        transform: translateX(-50%);
+        z-index: 100; /* Para asegurarse de que el logo quede visible por encima */
 }
     
 .logo_flotante img {
-    width: 100px;
-    height: 70px;
-    margin-right: 680px
-}  
+        width: 100px;
+        height: 70px;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+}
+    
+.logo_flotante img:hover {
+        transform: scale(1.1); /* Efecto al pasar el mouse */
+}
 
 nav {
     position: relative;
