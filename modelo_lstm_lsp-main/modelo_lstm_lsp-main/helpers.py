@@ -49,6 +49,7 @@ def draw_keypoints(image, results, frame_counter):
 
 def there_hand(results):
     """Verifica si hay al menos una mano detectada en los resultados."""
+    # Si hay manos detectadas en cualquiera de las dos
     return results.left_hand_landmarks is not None or results.right_hand_landmarks is not None
 
 def extract_hand_keypoints(results):
@@ -73,11 +74,16 @@ def extract_hand_keypoints(results):
 
 def display_text(frame, text, confidence):
     """Muestra el texto en la pantalla con estilo futurista."""
-    text_display = f'{text} ({confidence * 100:.2f}%)'
+    if confidence > 0:  # Muestra la confianza si está disponible
+        text_display = f'{text} ({confidence * 100:.2f}%)'
+    else:
+        text_display = text  # Si no hay confianza, solo muestra el gesto
+    
     cv2.putText(frame, text_display, (10, 50), FONT, 1, TEXT_COLOR, 2, cv2.LINE_AA)
 
 def draw_progress_bar(frame, confidence):
     """Dibuja una barra de progreso en la pantalla para mostrar el nivel de confianza."""
-    bar_width = int(confidence * 400)  # Ajusta el tamaño según la confianza
-    cv2.rectangle(frame, (10, 80), (10 + bar_width, 110), TEXT_COLOR, -1)
-    cv2.rectangle(frame, (10, 80), (410, 110), TEXT_COLOR, 2)
+    if confidence > 0:  # Dibuja solo si la confianza es mayor a 0
+        bar_width = int(confidence * 400)  # Ajusta el tamaño según la confianza
+        cv2.rectangle(frame, (10, 80), (10 + bar_width, 110), TEXT_COLOR, -1)
+        cv2.rectangle(frame, (10, 80), (410, 110), TEXT_COLOR, 2)
