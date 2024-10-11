@@ -8,17 +8,18 @@ import pygame
 import io
 
 # Ruta del modelo
-MODEL_PATH = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\A y B_model.keras'
+MODEL_PATH = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\modelo_numeros_0a5.keras'
 model = tf.keras.models.load_model(MODEL_PATH)
 
 # Gestos reconocidos por el modelo
 #gestures = ['C','D','B','A','E','F'] #A y B array
-gestures = ['A','B','C','D','E','F'] #C, D Y F array
+#gestures = ['A','B','C','D','E','F'] #C, D Y F array
+gestures = ['0','1','2','3','4','5']
 
 
 
 # Umbral de confianza
-CONFIDENCE_THRESHOLD = 0.8
+CONFIDENCE_THRESHOLD = 0.2
 PREDICTION_QUEUE_SIZE = 5
 GESTURE_DISPLAY_TIME = 30
 
