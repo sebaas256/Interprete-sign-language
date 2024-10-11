@@ -2,6 +2,14 @@
     --fuente-global: 'neusharp', sans-serif;
 }
 
+@font-face {
+    font-family: 'neusharp';
+    src: url('fonts/Neusharp-Bold.woff2') format('woff2'),
+         url('fonts/Neusharp-Bold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 #particles-js {
     position: absolute;
     width: 100%;
