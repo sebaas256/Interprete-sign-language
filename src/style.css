@@ -1,13 +1,5 @@
 :root {
-    --fuente-global: 'neusharp', sans-serif;
-}
-
-@font-face {
-    font-family: 'neusharp';
-    src: url('fonts/Neusharp-Bold.woff2') format('woff2'),
-         url('fonts/Neusharp-Bold.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+    --fuente-global: "Chakra Petch", sans-serif;
 }
 
 #particles-js {
@@ -23,7 +15,9 @@ body {
     margin: 0;
     padding: 0;
     background-color: black;
-    font-family: var(--fuente-global);}
+    font-family: var(--fuente-global);
+    font-style: oblique;
+}
 
 .logo_flotante {
         position: absolute;
