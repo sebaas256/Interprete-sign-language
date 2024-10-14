@@ -6,20 +6,26 @@ from helpers import mediapipe_detection, draw_keypoints, draw_progress_bar, disp
 from gtts import gTTS
 import pygame
 import io
+# Rutas de los modelos
+MODEL_PATHS = [
+    r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\C y D_model.keras',
+    r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\A y B_model.keras',
+    r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\D y F_model.keras'
+]
 
-# Ruta del modelo
-MODEL_PATH = r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\modelo_numeros_0a5.keras'
-model = tf.keras.models.load_model(MODEL_PATH)
-
-# Gestos reconocidos por el modelo
-#gestures = ['C','D','B','A','E','F'] #A y B array
-#gestures = ['A','B','C','D','E','F'] #C, D Y F array
-gestures = ['0','1','2','3','4','5']
-
+# Cargar los modelos
+models = [tf.keras.models.load_model(model_path) for model_path in MODEL_PATHS]
+    
+# Gestos reconocidos por cada modelo
+gestures_model_1 = ['A','B','C','D','E','F'] 
+gestures_model_2 = ['C','D','B','A','E','F']
+gestures_model_3 = ['A','B','C','D','E','F'] 
 
 
-# Umbral de confianza
-CONFIDENCE_THRESHOLD = 0.2
+# Umbrales de confianza por modelos
+CONFIDENCE_THRESHOLDS = [0.7, 0.4, 0.7]  # Umbrales de confianza separados
+
+# Suavización y tiempos de visualización
 PREDICTION_QUEUE_SIZE = 5
 GESTURE_DISPLAY_TIME = 30
 
@@ -28,7 +34,7 @@ def keypoints_to_image(keypoints, width=224, height=224):
     image = np.zeros((height, width, 3), dtype=np.uint8)
     for i in range(0, len(keypoints), 3):
         x = int(keypoints[i] * width)
-        y = int(keypoints[i+1] * height)
+        y = int(keypoints[i + 1] * height)
         cv2.circle(image, (x, y), 5, (0, 255, 0), -1)
     return image
 
@@ -42,7 +48,7 @@ def preprocess_results(results):
         for landmark in results.right_hand_landmarks.landmark:
             keypoints.extend([landmark.x, landmark.y, landmark.z])
     
-    if len(keypoints) == 0:
+    if len(keypoints) == 0: 
         return None  
     
     keypoints = np.array(keypoints)
@@ -63,14 +69,13 @@ def detectar_gestos_en_tiempo_real():
     with Holistic() as holistic_model:
         video = cv2.VideoCapture(0)
 
-        # Configurar el tamaño de la ventana
         video.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
         video.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
         
         last_gesture = None
         prediction_queue = []
         gesture_counter = 0
-        frame_counter = 0  # Contador de frames para el efecto de pulso
+        frame_counter = 0
         
         while video.isOpened():
             ret, frame = video.read()
@@ -81,18 +86,36 @@ def detectar_gestos_en_tiempo_real():
             results = mediapipe_detection(frame, holistic_model)
             image = preprocess_results(results)
             
+            gesture = None
+            max_confidence = 0.0
+            
             if image is None:
                 gesture = 'No se detectaron manos'
-                confidence = 0.0
             else:
-                prediction = model.predict(image)
-                gesture_index = np.argmax(prediction, axis=1)[0]
-                confidence = np.max(prediction, axis=1)[0]
+                all_gestures = []
+                for idx, model in enumerate(models):
+                    prediction = model.predict(image)
 
-                if confidence < CONFIDENCE_THRESHOLD:
+                    if idx == 0:
+                        gestures_list = gestures_model_1
+                    elif idx == 1:
+                        gestures_list = gestures_model_2
+                    else:
+                        gestures_list = gestures_model_3
+                    
+                    threshold = CONFIDENCE_THRESHOLDS[idx]  # Umbral para el modelo actual
+                    
+                    for i in range(len(prediction[0])):
+                        confidence = prediction[0][i]
+                        if confidence > threshold:
+                            all_gestures.append((gestures_list[i], confidence))
+                            max_confidence = max(max_confidence, confidence)
+
+                if not all_gestures:
                     gesture = 'Gesto no identificado'
                 else:
-                    gesture = gestures[gesture_index]
+                    # Tomar el gesto con mayor confianza de todos los modelos
+                    gesture = max(all_gestures, key=lambda x: x[1])[0]
                     prediction_queue.append(gesture)
 
                     if len(prediction_queue) > PREDICTION_QUEUE_SIZE:
@@ -112,15 +135,10 @@ def detectar_gestos_en_tiempo_real():
                     else:
                         gesture = 'No se detectaron manos'
 
-            # Mostrar texto del gesto y confianza en estilo futurista
-            display_text(frame, gesture, confidence)
-            
-            # Dibujar barra de progreso según el nivel de confianza
-            draw_progress_bar(frame, confidence)
-            
-            # Dibujar puntos clave con diseño futurista
+            display_text(frame, gesture, max_confidence)
+            draw_progress_bar(frame, max_confidence)
             draw_keypoints(frame, results, frame_counter)
-            frame_counter += 1  # Actualizar el contador para el efecto de pulso
+            frame_counter += 1
 
             cv2.imshow('Handspeak', frame)
             
@@ -142,8 +160,8 @@ def reproducir_palabra(texto):
     pygame.mixer.music.load(mp3_fp, 'mp3')
     pygame.mixer.music.play()
     
-    while pygame.mixer.music.get_busy():
+    while pygame.mixer.music.get_busy():    
         continue 
 
-if __name__ == "__main__":
+if __name__ == "__main__": 
     detectar_gestos_en_tiempo_real()
