@@ -17,28 +17,48 @@
             <img src="imagenes/solo_logo.png" alt="Logo del sitio" class="logo">
             </a>            
         </div>
-    <nav>
-        <ul>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="#guia_instalacion">Guía de instalación</a></li>
-            <li><a href="#ejemplos">Ejemplos</a></li>
-            <li><a href="#codigo-fuente">Código fuente</a></li>
-            <li><a href="#sobre-nosotros">Sobre nosotros</a></li>
-        </ul>
-    </nav>
+        <nav>
+            <div class="navbar-toggle" id="navbarToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        
+            <ul class="navbar-menu" id="navbarMenu">
+                <li class="iconos"><a href="index.html">Inicio</a></li>
+                <li class="iconos"><a href="secciones.html#otros_modelos">Letras de el abecedario</a></li>
+                <li class="iconos"><a href="secciones.html#guia_instalacion">Guía de instalación</a></li>
+                <li class="iconos"><a href="secciones.html#ejemplos">Ejemplos</a></li>
+                <li class="iconos"><a href="secciones.html#codigo-fuente">Código fuente</a></li>
+                <li class="iconos"><a href="secciones.html#sobre-nosotros">Sobre nosotros</a></li>
+            </ul>
+        </nav>
+
+    <section id="otros_modelos">
+        <h2>Descargar otro modelo de letras del abecedario</h2>
+        <div class="model-container">
+            <div class="model-card">
+                <h3>Modelo de letras A-F</h3>
+                <p>Este modelo incluye las letras desde la A hasta la F en lenguaje de señas. Ideal para la interpretacion de las primeras letras del abecedario.</p>
+                <a href="ruta_al_modelo/modelo_letras_A_M.zip" class="download-btn2">
+                    <i class="fas fa-download"></i> Descargar modelo A-F
+                </a>
+            </div>
+        </div>
+    </section>    
   
     <section id="guia_instalacion">
         <h2>Guía de instalación</h2>
         <div class="install-step left">
             <div class="step-card">
                 <h3>Paso 1: Descargar Handspeak</h3>
-                <p>Haz clic en el botón de descarga para obtener el instalador para tu sistema operativo.</p>
+                <p>Escoge el modelo que quieras descargar y haz click en el boton de descargar y se te empezara a instalar el programa como un archivo comprimido.</p>
             </div>
         </div>
         <div class="install-step right">
             <div class="step-card">
                 <h3>Paso 2: Instalar el programa</h3>
-                <p>Ejecuta el instalador y sigue las instrucciones en pantalla para completar la instalación.</p>
+                <p>Despues de descargar el modelo deseado descomprime el archivo y se te instalara una carpeta llamada main, adentro de esa carpeta estara el programa ejecutable.</p>
             </div>
         </div>
         <div class="install-step left">
@@ -128,5 +148,6 @@
         </div>
     </footer>    
     <script src="JS_secciones.js"></script>
+    <script src="menu_hamburguesa.js"></script>
 </body>
 </html>
