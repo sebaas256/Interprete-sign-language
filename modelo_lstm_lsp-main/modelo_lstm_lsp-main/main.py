@@ -6,24 +6,32 @@ from helpers import mediapipe_detection, draw_keypoints, draw_progress_bar, disp
 from gtts import gTTS
 import pygame
 import io
+import sys
+import os
+
+# Detectar si el script está corriendo dentro de PyInstaller
+if hasattr(sys, '_MEIPASS'):
+    model_base_path = sys._MEIPASS
+else:
+    model_base_path = os.path.dirname(os.path.abspath(__file__))
+
 # Rutas de los modelos
 MODEL_PATHS = [
-    r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\C y D_model.keras',
-    r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\A y B_model.keras',
-    r'C:\Users\cseba\OneDrive\Escritorio\Proyecto_final\D y F_model.keras'
+    os.path.join(model_base_path, 'try_varias_palabras_sino.keras'),
+    os.path.join(model_base_path, 'try_varias_palabras.keras'),
+    os.path.join(model_base_path, 'best_model_palabras.keras')
 ]
 
 # Cargar los modelos
 models = [tf.keras.models.load_model(model_path) for model_path in MODEL_PATHS]
     
 # Gestos reconocidos por cada modelo
-gestures_model_1 = ['A','B','C','D','E','F'] 
-gestures_model_2 = ['C','D','B','A','E','F']
-gestures_model_3 = ['A','B','C','D','E','F'] 
-
+gestures_model_1 = ['Cuando','Cuidado','Gracias','Hola','No','Ok','Perdon','Permiso','Si','Te amo'] 
+gestures_model_2 = ['Cuidado','Cuando','Perdon','Permiso','Ok','Te amo']
+gestures_model_3 = ['Gracias', 'Hola', 'Ok', 'Te amo']
 
 # Umbrales de confianza por modelos
-CONFIDENCE_THRESHOLDS = [0.7, 0.4, 0.7]  # Umbrales de confianza separados
+CONFIDENCE_THRESHOLDS = [0.4, 0.8, 0.87]  # Umbrales de confianza separados
 
 # Suavización y tiempos de visualización
 PREDICTION_QUEUE_SIZE = 5
