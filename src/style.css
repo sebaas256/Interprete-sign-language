@@ -757,3 +757,69 @@ footer {
     box-shadow: inset 0 0 20px rgba(216, 126, 23, 0.845), 0 0 20px rgba(200, 142, 15, 0.681);
     text-shadow: 1px 1px 6px #ffffffaa;
 }
+
+#manuales {
+    margin: 50px auto;
+    max-width: 1000px;
+    text-align: center;
+}
+
+#manuales h2 {
+    color: #ffa500;
+    font-size: 36px;
+    font-weight: bold;
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.6),
+        0 0 20px rgba(255, 165, 0, 0.8);
+    animation: fadeGlow 3s infinite alternate;  
+}
+
+.manuales-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.manual-card {
+    background-color: rgba(51, 51, 51, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.manual-card:hover {
+    transform: scale(1.05);
+}
+
+.manual-card h3 {
+    color: #ffa500;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.manual-card p {
+    color: white;
+    margin-bottom: 20px;
+}
+
+.download-btn {
+    display: block;
+    background-color: orange;
+    color: black;
+    padding: 15px 30px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.download-btn:hover {
+    box-shadow: inset 0 0 20px rgba(216, 126, 23, 0.845), 0 0 20px rgba(200, 142, 15, 0.681);
+    text-shadow: 1px 1px 6px #ffffffaa;
+}
+
